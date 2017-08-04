@@ -1,0 +1,344 @@
+-- phpMyAdmin SQL Dump
+-- version 4.5.1
+-- http://www.phpmyadmin.net
+--
+-- Host: 127.0.0.1
+-- Generation Time: Aug 05, 2017 at 01:47 AM
+-- Server version: 10.1.19-MariaDB
+-- PHP Version: 7.0.13
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `rumah-makan`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `barang`
+--
+
+CREATE TABLE `barang` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(100) NOT NULL,
+  `kategori_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barang`
+--
+
+INSERT INTO `barang` (`id`, `nama`, `kategori_id`, `created_at`, `updated_at`) VALUES
+(1, 'Ayam', 1, '2017-08-02 10:52:50', '2017-08-02 10:52:50'),
+(2, 'Paru Sapi', 1, '2017-08-04 15:11:14', '2017-08-04 15:11:14'),
+(3, 'Telor', 3, '2017-08-03 10:52:38', '2017-08-03 10:52:38'),
+(4, 'Ikan Kembung', 4, '2017-08-03 10:52:53', '2017-08-03 10:52:53');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `barang_kategori`
+--
+
+CREATE TABLE `barang_kategori` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(100) NOT NULL,
+  `pengukuran_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barang_kategori`
+--
+
+INSERT INTO `barang_kategori` (`id`, `nama`, `pengukuran_id`, `created_at`, `updated_at`) VALUES
+(1, 'Daging', 1, '2017-08-02 10:51:50', '2017-08-02 10:51:50'),
+(2, 'Minyak', 2, '2017-08-02 10:51:50', '2017-08-02 10:51:50'),
+(3, 'Telor', 1, '2017-08-04 14:59:49', '2017-08-04 14:59:49'),
+(4, 'Ikan', 1, '2017-08-04 15:02:57', '2017-08-04 15:02:57');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `barang_price`
+--
+
+CREATE TABLE `barang_price` (
+  `id` int(11) NOT NULL,
+  `barang_id` int(11) NOT NULL,
+  `price` bigint(20) NOT NULL COMMENT 'harga per pengukuran',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `barang_price`
+--
+
+INSERT INTO `barang_price` (`id`, `barang_id`, `price`, `created_at`, `updated_at`) VALUES
+(1, 1, 36000, '2017-08-04 15:07:51', '2017-08-04 15:07:51'),
+(2, 3, 21000, '2017-08-04 15:09:26', '2017-08-04 15:09:26'),
+(3, 4, 22000, '2017-08-04 15:09:59', '2017-08-04 15:09:59'),
+(4, 2, 100000, '2017-08-04 15:12:16', '2017-08-04 15:12:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pembelian`
+--
+
+CREATE TABLE `pembelian` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL COMMENT 'submitted_by',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pembelian`
+--
+
+INSERT INTO `pembelian` (`id`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 1, '2017-08-02 14:40:23', '2017-08-02 14:40:23'),
+(2, 1, '2017-08-04 18:14:38', '2017-08-04 18:14:38'),
+(3, 1, '2017-08-04 18:18:58', '2017-08-04 18:18:58'),
+(4, 1, '2017-08-04 18:19:56', '2017-08-04 18:19:56');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pembelian_detail`
+--
+
+CREATE TABLE `pembelian_detail` (
+  `id` int(11) NOT NULL,
+  `pembelian_id` int(11) NOT NULL,
+  `barang_id` int(11) NOT NULL,
+  `qty` bigint(20) NOT NULL COMMENT 'berapa kilo / bungkus ?',
+  `is_done` enum('0','1') NOT NULL DEFAULT '0' COMMENT '0 = false; 1 = true',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `deleted_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pembelian_detail`
+--
+
+INSERT INTO `pembelian_detail` (`id`, `pembelian_id`, `barang_id`, `qty`, `is_done`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(10, 2, 2, 1, '1', '2017-08-04 17:50:28', '2017-08-04 17:50:28', NULL),
+(11, 5, 1, 1, '0', '2017-08-04 18:20:52', '2017-08-04 18:20:52', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pengguna`
+--
+
+CREATE TABLE `pengguna` (
+  `id` int(11) NOT NULL,
+  `tipe_id` int(11) NOT NULL,
+  `nama_depan` text NOT NULL,
+  `nama_belakang` text NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` text NOT NULL,
+  `last_login_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pengguna`
+--
+
+INSERT INTO `pengguna` (`id`, `tipe_id`, `nama_depan`, `nama_belakang`, `username`, `email`, `password`, `last_login_at`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Misran', 'Talago', 'misran', 'misrantalago@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2017-08-02 10:27:10', '2017-08-02 10:27:10', '2017-08-02 10:22:47'),
+(2, 2, 'Jendra', 'Volta', 'jendra', 'jendravolta@gmail.com', '827ccb0eea8a706c4c34a16891f84e7b', '2017-08-02 10:27:18', '2017-08-02 10:27:18', '2017-08-02 10:22:47');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pengguna_kategori`
+--
+
+CREATE TABLE `pengguna_kategori` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pengguna_kategori`
+--
+
+INSERT INTO `pengguna_kategori` (`id`, `nama`, `created_at`, `updated_at`) VALUES
+(1, 'admin', '2017-08-02 10:09:11', '2017-08-02 10:09:11'),
+(2, 'kasir', '2017-08-02 10:09:11', '2017-08-02 10:09:11');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pengukuran`
+--
+
+CREATE TABLE `pengukuran` (
+  `id` int(11) NOT NULL,
+  `nama` varchar(100) NOT NULL COMMENT 'KG',
+  `keterangan` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pengukuran`
+--
+
+INSERT INTO `pengukuran` (`id`, `nama`, `keterangan`, `created_at`, `updated_at`) VALUES
+(1, 'KG (Daging)', 'Kilogram untuk satuan daging', '2017-08-04 14:37:59', '2017-08-04 14:37:59'),
+(2, 'Liter', 'Pengukuran untuk minyak', '2017-08-04 14:56:42', '2017-08-04 14:56:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pengukuran_sub`
+--
+
+CREATE TABLE `pengukuran_sub` (
+  `id` int(11) NOT NULL,
+  `pengukuran_id` int(11) NOT NULL,
+  `nama` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pengukuran_sub`
+--
+
+INSERT INTO `pengukuran_sub` (`id`, `pengukuran_id`, `nama`, `created_at`, `updated_at`) VALUES
+(1, 1, 'Potong', '2017-08-04 14:40:05', '2017-08-04 14:40:05');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `barang`
+--
+ALTER TABLE `barang`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `barang_kategori`
+--
+ALTER TABLE `barang_kategori`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `barang_price`
+--
+ALTER TABLE `barang_price`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pembelian`
+--
+ALTER TABLE `pembelian`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pembelian_detail`
+--
+ALTER TABLE `pembelian_detail`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pengguna`
+--
+ALTER TABLE `pengguna`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `pengguna_kategori`
+--
+ALTER TABLE `pengguna_kategori`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pengukuran`
+--
+ALTER TABLE `pengukuran`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `pengukuran_sub`
+--
+ALTER TABLE `pengukuran_sub`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `barang`
+--
+ALTER TABLE `barang`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `barang_kategori`
+--
+ALTER TABLE `barang_kategori`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `barang_price`
+--
+ALTER TABLE `barang_price`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `pembelian`
+--
+ALTER TABLE `pembelian`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `pembelian_detail`
+--
+ALTER TABLE `pembelian_detail`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT for table `pengguna`
+--
+ALTER TABLE `pengguna`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `pengguna_kategori`
+--
+ALTER TABLE `pengguna_kategori`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `pengukuran`
+--
+ALTER TABLE `pengukuran`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `pengukuran_sub`
+--
+ALTER TABLE `pengukuran_sub`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
