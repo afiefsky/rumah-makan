@@ -46,18 +46,34 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><?php echo anchor('barang','Barang');?></li>
-            <li><?php echo anchor('tipe','Jenis');?></li>
-            <li><?php echo anchor('pembelian','Pembelian');?></li>
+            <li><?php echo anchor('pegawai', 'Data Pegawai');?></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Pembelian <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><?php echo anchor('kategori', 'Kategori Belanja');?></li>
+                <li><?php echo anchor('barang', 'Perhitungan Belanja');?></li>
+                <li><?php echo anchor('pembelian', 'Transaksi Pembelian');?></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Penjualan <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><?php echo anchor('subkategori', 'Kategori Menu');?></li>
+                <li><?php echo anchor('menu/index', 'Data Menu');?></li>
+                <li><?php echo anchor('penjualan/index', 'Transaksi');?></li>
+              </ul>
+            </li>
+            <li><?php echo anchor('laba', 'Manajemen Laba');?></li>
+            
             <!-- <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Laporan <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><?php echo anchor('transaksi/laporan','Laporan Transaksi');?></li>
+                <li><?php echo anchor('transaksi/laporan', 'Laporan Transaksi');?></li>
               </ul>
             </li> -->
           </ul>
           <ul class="nav navbar-nav navbar-right">
-              <li class="acttive"><?php echo anchor('auth/logout','Logout');?></li></li>
+              <li class="acttive"><?php echo anchor('auth/logout', 'Logout');?></li></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

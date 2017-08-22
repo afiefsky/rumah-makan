@@ -13,9 +13,11 @@ class Pengguna_model extends CI_Model
             'password'=>md5($password)
         ]);
 
+        $data_row_array = $query->row_array();
+
         $this->session->set_userdata([
-            'tipe_id' => $query->row_array()['tipe_id'],
-            'user_id' => $query->row_array()['id']
+            'kategori_id' => $data_row_array['kategori_id'],
+            'user_id' => $data_row_array['id']
         ]);
 
         if ($query->num_rows() > 0) {

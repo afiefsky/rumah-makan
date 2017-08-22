@@ -1,6 +1,6 @@
 <?php
 
-class Tipe_model extends CI_Model 
+class Kategori_model extends CI_Model 
 {
 	public function __construct()
 	{
@@ -9,13 +9,13 @@ class Tipe_model extends CI_Model
 
 	public function getAll()
 	{
-		return $this->db->get('barang_tipe');
+		return $this->db->get('barang_kategori');
 	}
 
 	public function getOne($id)
 	{
 		$this->db->where('id', $id);
-		return $this->db->get('barang_tipe');
+		return $this->db->get('barang_kategori');
 	}
 
 }

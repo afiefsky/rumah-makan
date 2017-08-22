@@ -1,48 +1,53 @@
 <?php
-class pegawai extends CI_Controller{
-    
-    function __construct() {
+
+class Pegawai extends CI_Controller
+{
+    public function __construct()
+    {
         parent::__construct();
-        $this->load->model('model_pegawai');
+        $this->load->model('Pegawai_model');
+        $this->pegawai = $this->Pegawai_model;
     }
-            function index(){
-            $data['record']= $this->model_pegawai->tampilkan_data();
-        //$this->load->view('pegawai/lihat_data',$data);
-            $this->template->load('template_pemilik','pegawai/lihat_data',$data);
-    }
-    
-    
-    function post()
+
+    public function index()
     {
-        if(isset($_POST['submit'])){
-            // proses pegawai
-            $this->model_pegawai->post();
+        $data['record'] = $this->pegawai->getAll();
+        $this->template->load('template/admin_template', 'pegawai/index', $data);
+    }
+
+    public function edit()
+    {
+        if (isset($_POST['submit'])) {
+            $data['nama_depan'] = $this->input->post('nama_depan');
+            $data['nama_belakang'] = $this->input->post('nama_belakang');
+            $data['no_hp'] = $this->input->post('no_hp');
+            $data['posisi'] = $this->input->post('posisi');
+            $data['gaji'] = $this->input->post('gaji');
+
+            $this->db->where('id', $this->uri->segment(3));
+            $this->db->update('pegawai', $data);
+
             redirect('pegawai');
-        }
-        else{
-            //$this->load->view('pegawai/form_input');
-            $this->template->load('template','pegawai/form_input');
+        } else {
+            $id = $this->uri->segment(3);
+            $data['record'] = $this->pegawai->getOne($id)->row_array();
+            $this->template->load('template/admin_template', 'pegawai/edit', $data);
         }
     }
-    
-    function edit()
+
+    public function add()
     {
-       if(isset($_POST['submit'])){
-            // proses pegawai
-            $this->model_pegawai->edit();
+        if (isset($_POST['submit'])) {
+            $data['nama_depan'] = $this->input->post('nama_depan');
+            $data['nama_belakang'] = $this->input->post('nama_belakang');
+            $data['no_hp'] = $this->input->post('no_hp');
+            $data['posisi'] = $this->input->post('posisi');
+            $data['gaji'] = $this->input->post('gaji');
+
+            $this->db->insert('pegawai', $data);
             redirect('pegawai');
+        } else {
+            $this->template->load('template/admin_template', 'pegawai/add');
         }
-        else{
-            $id= $this->uri->segment(3);
-            $data['record']= $this->model_pegawai->get_one($id)->row_array();
-            //$this->load->view('pegawai/form_edit',$data);
-            $this->template->load('template','pegawai/form_edit',$data);
-        }
-    }
-    function delete()
-    {
-        $id=  $this->uri->segment(3);
-        $this->model_pegawai->delete($id);
-        redirect('pegawai');
     }
 }

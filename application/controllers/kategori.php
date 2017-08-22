@@ -1,54 +1,67 @@
 <?php
-class kategori extends CI_Controller{
-    
-    function __construct() {
-        parent::__construct();
-        $this->load->model('model_kategori');
-    }
-            function index(){
-            $data['record']= $this->model_kategori->tampilkan_data();
-        //$this->load->view('kategori/lihat_data',$data);
-            $status = $this->session->userdata('status');
-            if($status=='kasir'){
-                $this->template->load('template','kategori/lihat_data',$data);
-            }else{
-                $this->template->load('template_pemilik','kategori/lihat_data',$data);
-            }
-        
-    }
-    
-    
-    function post()
-    {
-        if(isset($_POST['submit'])){
-            // proses kategori
-            $this->model_kategori->post();
-            redirect('kategori');
-        }
-        else{
-            //$this->load->view('kategori/form_input');
-            $this->template->load('template','kategori/form_input');
-        }
-    }
-    
-    function edit()
-    {
-       if(isset($_POST['submit'])){
-            // proses kategori
-            $this->model_kategori->edit();
-            redirect('kategori');
-        }
-        else{
-            $id= $this->uri->segment(3);
-            $data['record']= $this->model_kategori->get_one($id)->row_array();
-            //$this->load->view('kategori/form_edit',$data);
-            $this->template->load('template','kategori/form_edit',$data);
-        }
-    }
-    function delete()
-    {
-        $id=  $this->uri->segment(3);
-        $this->model_kategori->delete($id);
-        redirect('kategori');
-    }
+
+class Kategori extends CI_Controller
+{
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('Kategori_model');
+		$this->kategori = $this->Kategori_model;
+	}
+
+	public function index()
+	{
+		$data['record'] = $this->kategori->getAll();
+
+		$this->template->load('template/admin_template', 'kategori/index', $data);
+	}
+
+	public function add()
+	{
+		if (isset($_POST['submit'])) {
+			$nama = $this->input->post('nama');
+
+			$data = [
+				'nama' => $nama
+			];
+
+			$this->db->insert('barang_kategori', $data);
+
+			redirect('kategori/index');
+		} else {
+			$this->template->load('template/admin_template' ,'kategori/add');
+		}
+	}
+
+	public function edit()
+	{
+		if (isset($_POST['submit'])) {
+			$nama = $this->input->post('nama');
+
+			$data = [
+				'nama' => $nama
+			];
+
+			$this->db->where('id', $this->uri->segment(3));
+			$this->db->update('barang_kategori', $data);
+
+			redirect('kategori/index');
+		} else {
+			$kategori_id = $this->uri->segment(3);
+
+			$data['record'] = $this->kategori->getOne($kategori_id)->row_array();
+
+			$this->template->load('template/admin_template', 'kategori/edit', $data);
+		}
+	}
+
+	public function delete()
+	{
+		$id = $this->uri->segment(3);
+
+		$this->db->where('id', $id);
+		$this->db->delete('barang_kategori');
+
+		redirect('kategori/index');
+	}
 }

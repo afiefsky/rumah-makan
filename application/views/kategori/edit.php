@@ -1,5 +1,5 @@
 <?php
-	echo form_open('tipe/edit/'.$this->uri->segment(3));
+	echo form_open('kategori/edit/'.$this->uri->segment(3));
 ?>
 <table class="table table-bordered">
 	<tr>

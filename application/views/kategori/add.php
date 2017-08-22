@@ -1,9 +1,9 @@
 <?php
-	echo form_open('tipe/add');
+	echo form_open('kategori/add');
 ?>
 <table class="table table-bordered">
 	<tr>
-		<td>Nama Tipe</td>
+		<td>Nama Kategori</td>
 		<td><input type="text" name="nama"></td>
 	</tr>
 	<tr>

@@ -21,7 +21,7 @@ class Auth extends CI_Controller{
             $password = $this->input->post('password');
 
             $hasil = $this->pengguna->login($username, $password);
-            
+
             if ($hasil == 1) {
                 redirect('dashboard');
             } else {

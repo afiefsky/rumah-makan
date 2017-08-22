@@ -1,4 +1,4 @@
-<h3>Form Transaksi</h3>
+<h3>Daftar Pembelian</h3>
 <?php
   echo form_open('pembelian/add');
 ?>
@@ -18,46 +18,65 @@
         }
         ?>
       </select>
-      Qty: <input type="text" name="qty" id="qty" size="5" value="<?php echo $qty; ?>" required>
+      Qty: <input type="text" name="qty" id="qty" size="5" value="<?php echo $qty; ?>" required>&nbsp;KG | 
       <button type="submit" name="submit_check">Check</button>
     </td>
   </tr>
-    <tr>
-      <td>
-        Harga Per Kilo:
-      </td>
-      <td>
-        <input type="text" name="hrg_per_kilo" value="<?php echo $harga_per_kilo; ?>"
+  <!-- <tr>
+      <td> -->
+        <input type="hidden" name="potong" value="<?php echo $potong; ?>"
           placeholder="Harga setelah check" readonly>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        Total:
-      </td>
-      <td>
-        <input type="text" name="hrg_per_kilo" value="<?php echo $harga_total; ?>"
-          placeholder="Harga setelah check" readonly>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <?php
-        if ($button == 0) {
-            echo "<button type='submit' name='submit_keranjang' id='submit_pembelian'
-              class='btn btn-danger btn-sm' disabled>Tambah Ke Keranjang</button>";
-        } else {
-            echo "<button type='submit' name='submit_keranjang' id='submit_pembelian'
-              class='btn btn-success btn-sm'>Tambah Ke Keranjang</button>";
-        }
-        ?>
-      </td>
-      <td>
-        <?php
-        echo anchor('pembelian/selesai/'. $pembelian_id, 'Selesai Pembelian', ['class' => 'btn btn-success btn-sm']);
-        ?>
-      </td>
-    </tr>
+      <!-- </td>
+  </tr> -->
+  <tr>
+    <td>
+      Jumlah Per Kilo:
+    </td>
+    <td>
+      <input type="text" name="jumlah_per_kilo" value="<?php echo $jumlah_per_kilo; ?>"
+        placeholder="Harga setelah check" readonly>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Harga Per Kilo:
+    </td>
+    <td>
+      <input type="text" name="harga_per_kilo" value="<?php echo $harga_per_kilo; ?>"
+        placeholder="Harga setelah check" readonly>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Total:
+    </td>
+    <td>
+      <input type="text" name="hrg_per_kilo" value="<?php echo $harga_total; ?>"
+        placeholder="Harga setelah check" readonly>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <?php
+      if ($button == 0) {
+          echo "<button type='submit' name='submit_keranjang' id='submit_pembelian'
+            class='btn btn-danger btn-sm' disabled>Tambah Ke Keranjang</button>";
+      } else {
+          echo "<button type='submit' name='submit_keranjang' id='submit_pembelian'
+            class='btn btn-success btn-sm'>Tambah Ke Keranjang</button>";
+      }
+      ?>
+    </td>
+    <td>
+      <?php
+      if ($allowEnd == 0) {
+          echo anchor('pembelian/selesai/'. $pembelian_id, 'Selesai Pembelian', ['class' => 'btn btn-danger btn-sm', 'disabled' => 'true']);
+      } else {
+          echo anchor('pembelian/selesai/'. $pembelian_id, 'Selesai Pembelian', ['class' => 'btn btn-success btn-sm']);
+      }
+      ?>
+    </td>
+  </tr>
 </table>
 <?php
     echo form_close();
