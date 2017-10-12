@@ -7,6 +7,24 @@ class Penjualan_model extends CI_Model
         parent::__construct();
     }
 
+    public function index_paging($page, $limiter)
+    {
+        $query = "SELECT
+                    penjualan.*, pengguna.nama_depan, pengguna.nama_belakang, menu.harga as per_price, detail.qty
+                FROM
+                    penjualan as penjualan, pengguna as pengguna, penjualan_detail as detail, menu as menu
+                WHERE
+                    penjualan.user_id = pengguna.id
+                AND
+                    detail.penjualan_id = penjualan.id
+                AND
+                    detail.menu_id = menu.id
+                ORDER BY
+                    penjualan.id DESC
+                LIMIT $page, $limiter";
+        return $this->db->query($query);
+    }
+
     public function create($data)
     {
         $this->db->insert('penjualan', $data);
@@ -26,20 +44,17 @@ class Penjualan_model extends CI_Model
     {
         $query = "SELECT
                     detail.id,
-                    barang.nama AS barang_name,
+                    menu.nama AS barang_name,
                     detail.qty,
-                    per_price.per_price AS price
+                    menu.harga AS price
                 FROM
                     penjualan_detail AS detail,
                     penjualan AS penjualan,
-                    barang AS barang,
-                    barang_per_price AS per_price
+                    menu AS menu
                 WHERE
-                    per_price.barang_id = barang.id
-                AND
                     detail.penjualan_id = penjualan.id
                 AND
-                    detail.barang_id = barang.id
+                    detail.menu_id = menu.id
                 AND
                     detail.penjualan_id = $id";
         return $this->db->query($query);
@@ -68,12 +83,23 @@ class Penjualan_model extends CI_Model
 
     public function get()
     {
-        $this->db->select('penjualan.*, pengguna.nama_depan, pengguna.nama_belakang, per_price.per_price as per_price, detail.qty');
-        $this->db->from('penjualan as penjualan, pengguna as pengguna, penjualan_detail as detail, barang_per_price as per_price, barang as barang');
+        $this->db->select('penjualan.*, pengguna.nama_depan, pengguna.nama_belakang, menu.harga as per_price, detail.qty');
+        $this->db->from('penjualan as penjualan, pengguna as pengguna, penjualan_detail as detail, menu as menu');
         $this->db->where('penjualan.user_id = pengguna.id');
         $this->db->where('detail.penjualan_id = penjualan.id');
-        $this->db->where('detail.barang_id = barang.id');
-        $this->db->where('per_price.barang_id = barang.id');
+        $this->db->where('detail.menu_id = menu.id');
+        $this->db->order_by('penjualan.id', 'DESC');
+        return $this->db->get();
+    }
+
+    public function getById($id)
+    {
+        $this->db->select('detail.*, pengguna.nama_depan, pengguna.nama_belakang, menu.harga, detail.qty, menu.nama');
+        $this->db->from('penjualan as penjualan, pengguna as pengguna, penjualan_detail as detail, menu as menu');
+        $this->db->where('penjualan.user_id = pengguna.id');
+        $this->db->where('detail.penjualan_id = penjualan.id');
+        $this->db->where('detail.menu_id = menu.id');
+        $this->db->where('detail.penjualan_id = ', $id);
         $this->db->order_by('penjualan.id', 'DESC');
         return $this->db->get();
     }
@@ -92,15 +118,13 @@ class Penjualan_model extends CI_Model
     public function all($penjualan_id)
     {
         $this->db->select('
-            barang.nama,
-            per_price.per_price,
+            menu.nama,
+            menu.harga as per_price,
             detail.qty,
-            (per_price.per_price * detail.qty) as subtotal
+            (menu.harga * detail.qty) as subtotal
         ');
-
-        $this->db->from('penjualan_detail as detail, barang as barang, barang_per_price as per_price');
-        $this->db->where('detail.barang_id = barang.id');
-        $this->db->where('per_price.barang_id = barang.id');
+        $this->db->from('penjualan_detail as detail, menu as menu');
+        $this->db->where('detail.menu_id = menu.id');
         $this->db->where('detail.penjualan_id = ', $penjualan_id);
         return $this->db->get();
     }

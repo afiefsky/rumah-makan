@@ -3,11 +3,11 @@
 <table class='table table-bordered'>
     <tbody>
         <?php
-        $i = 0;
+        $i = 1;
         $status = 0;
 
         echo "<tr>";
-        for ($i; $i<4; $i++) {
+        for ($i; $i<=4; $i++) {
             foreach ($table->result() as $t) {
                 if ($t->status == 0) {
                     $status = '<b />Kosong';
@@ -18,11 +18,11 @@
                         <img src='".base_url()."uploads/1.jpg' height='150' width='150' />
                         <br />
                         Meja ".$i." : 
-                        ".anchor('penjualan/index', 'Pesan', ['class' => 'btn btn-info btn-sm'])."<br />
+                        ".anchor('penjualan/meja/'.$t->id, 'Pesan', ['class' => 'btn btn-info btn-sm'])."<br />
                         Status : ".$status."
                     </td>";
                     $i++;
-                if ($i == 4) {
+                if ($i == 5) {
                     echo "</tr>";
                 } else {
 

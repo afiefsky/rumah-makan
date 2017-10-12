@@ -40,3 +40,6 @@ if ($this->session->userdata('kategori_id') == 2) {
     }
     ?>
 </table>
+<?php
+echo $paging;
+?>

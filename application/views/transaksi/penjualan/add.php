@@ -3,11 +3,11 @@
 <table class="table table-bordered">
     <tr>
         <td colspan="2">
-            Menu: <select name="barang_id">
+            Menu: <select name="menu_id">
                 <?php
-                foreach ($record_barang->result() as $r) {
+                foreach ($record_menu->result() as $r) {
                     echo "<option value='$r->id'";
-                    echo $find_barang_array['id'] == $r->id ? 'selected' : '';
+                    echo $find_menu_array['id'] == $r->id ? 'selected' : '';
                     echo ">$r->nama</option>";
                 }
                 ?>
@@ -62,15 +62,15 @@
     ?>
     <tr>
         <td align="right" colspan="4">Total :</td>
-        <td><input type="text" name="total" value="<?php echo $total; ?>" readonly="true"></td>
+        <td>Rp. <input type="text" name="total" value="<?php echo $total; ?>" readonly="true"></td>
     </tr>
     <tr>
         <td align="right" colspan="4">Nominal Uang :</td>
-        <td><input type="text" name="cash" value="<?php echo $cash; ?>"></td>
+        <td>Rp. <input type="text" name="cash" value="<?php echo $cash; ?>"></td>
     </tr>
     <tr>
         <td align="right" colspan="4">Kembalian :</td>
-        <td><input type="text" name="charge" value="<?php echo $this->session->userdata('charge'); ?>"> <input type="submit" name="submit_charge" value="Check"></td>
+        <td>Rp. <input type="text" name="charge" value="<?php echo $this->session->userdata('charge'); ?>"> <input type="submit" name="submit_charge" value="Check"></td>
     </tr>
 </table>
 <?php echo form_close(); ?>

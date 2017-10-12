@@ -5,15 +5,44 @@ class Penjualan extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['Penjualan_model', 'Barang_model', 'Barang_quantity_model']);
+        $this->load->model(['Penjualan_model', 'Barang_model', 'Barang_quantity_model', 'Menu_model']);
         $this->penjualan = $this->Penjualan_model;
         $this->barang = $this->Barang_model;
         $this->quantity = $this->Barang_quantity_model;
+        $this->menu = $this->Menu_model;
+    }
+
+    public funcion meja()
+    {
+        
     }
 
     public function index()
     {
-        $data['record'] = $this->penjualan->get();
+        $this->load->library('pagination');
+
+        $config['base_url'] = base_url().'index.php/penjualan/index/';
+        $config['total_rows'] = $this->penjualan->get()->num_rows();
+
+        if (isset($_POST['submit_page'])) {
+            $this->session->set_userdata(['per_page' => $this->input->post('page_length')]);
+        } else {
+
+        }
+
+        if ($this->session->userdata('per_page') == null) {
+            $config['per_page'] = 5;
+        } else {
+            $config['per_page'] = $this->session->userdata('per_page');
+        }
+
+        $this->pagination->initialize($config);
+
+        $data['paging'] = $this->pagination->create_links();
+        $page = $this->uri->segment(3);
+        $page = $page == '' ? 0 : $page;
+
+        $data['record'] = $this->penjualan->index_paging($page, $config['per_page']);
 
         $this->template->load('template/kasir_template', 'transaksi/penjualan/index', $data);
     }
@@ -119,6 +148,15 @@ class Penjualan extends CI_Controller
         $this->template->load('template/admin_template', 'pembelian/detail', $data);
     }
 
+    public function detail_penjualan()
+    {
+        $penjualan_id = $this->uri->segment(3);
+
+        $data['record'] = $this->penjualan->getById($penjualan_id);
+
+        $this->template->load('template/admin_template', 'penjualan/menu/detail', $data);
+    }
+
     public function add()
     {
         /* Global declaration of penjualan_id */
@@ -129,9 +167,9 @@ class Penjualan extends CI_Controller
         /* End */
 
         if (isset($_POST['submit_finish'])) {
-
+            
         } elseif (isset($_POST['submit_check'])) {
-            $barang_id = $this->input->post('barang_id');
+            $menu_id = $this->input->post('menu_id');
             $qty = $this->input->post('qty');
 
             /* Cash */
@@ -139,14 +177,14 @@ class Penjualan extends CI_Controller
             $data['selesai'] = $this->session->userdata('selesai');
 
             $data['qty'] = $qty;
-            $data['record_find_barang'] = $this->barang->find($barang_id);
-            $data['find_barang_array'] = $data['record_find_barang']->row_array();
+            $data['record_find_menu'] = $this->menu->find($menu_id);
+            $data['find_menu_array'] = $data['record_find_menu']->row_array();
 
-            $data['record_harga'] = $data['find_barang_array']['per_price'];
-            $data['record_harga_calculated'] = $data['find_barang_array']['per_price'] * $qty;
+            $data['record_harga'] = $data['find_menu_array']['harga'];
+            $data['record_harga_calculated'] = $data['record_harga'] * $qty;
 
             $data['record_purchased'] = $this->penjualan->all($data['penjualan_id']);
-            $data['record_barang'] = $this->barang->get();
+            $data['record_menu'] = $this->menu->index();
 
             $this->template->load('template/kasir_template', 'transaksi/penjualan/add', $data);
         } elseif (isset($_POST['submit_charge'])) {
@@ -164,12 +202,11 @@ class Penjualan extends CI_Controller
 
             redirect('penjualan/add');
         } elseif (isset($_POST['submit_keranjang'])) {
-
-            $data['barang_id'] = $this->input->post('barang_id');
+            $data['menu_id'] = $this->input->post('menu_id');
             $data['qty'] = $this->input->post('qty');
             $data['is_done'] = '0';
 
-            $this->quantity->update($data['barang_id'], $data['qty']);
+            // $this->quantity->update($data['barang_id'], $data['qty']);
 
             $this->db->insert('penjualan_detail', $data);
             $data['cash'] = $this->session->userdata('cash');
@@ -178,11 +215,11 @@ class Penjualan extends CI_Controller
             /* Cash of the customer */
             $data['cash'] = $this->session->userdata('cash');
 
-            $data['find_barang_array'] = 0;
-            $data['qty'] = 0;
+            $data['find_menu_array'] = 0;
+            $data['qty'] = 1;
             $data['record_harga'] = 0;
             $data['record_harga_calculated'] = 0;
-            $data['record_barang'] = $this->barang->get();
+            $data['record_menu'] = $this->menu->index();
 
             /* Finish button */
             $data['selesai'] = $this->session->userdata('selesai');

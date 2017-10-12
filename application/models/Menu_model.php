@@ -22,4 +22,12 @@ class Menu_model extends CI_Model
         $this->db->where('id', $id);
         return $this->db->get('menu');
     }
+
+    public function find($id)
+    {
+        $this->db->select('*');
+        $this->db->from('menu');
+        $this->db->where('menu.id', $id);
+        return $this->db->get();
+    }
 }
