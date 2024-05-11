@@ -1,3 +1,5 @@
+This repo created to help a friend during my study at Politeknik Pos Indonesia, during last semester, in 2016-2017
+
 ###################
 What is CodeIgniter
 ###################
